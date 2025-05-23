@@ -1,3 +1,4 @@
+# bot.py
 import discord
 from discord.ext import commands
 import os
@@ -10,10 +11,12 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 FFMPEG_PATH = "ffmpeg"
 
+# Configuración para yt_dlp
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'noplaylist': True,
     'quiet': True,
+    'extract_flat': 'in_playlist',
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0'
@@ -45,7 +48,10 @@ async def ensure_voice(ctx):
 
 @bot.command()
 async def play(ctx, *, source: str):
-    prohibited_keywords = ["cumbia", "reggaeton", "daddy yankee", "bad bunny", "karol g", "vallenato", "ozuna", "anuel"]
+    prohibited_keywords = [
+        "cumbia", "reggaeton", "daddy yankee", "bad bunny",
+        "karol g", "vallenato", "ozuna", "anuel"
+    ]
 
     if any(keyword.lower() in source.lower() for keyword in prohibited_keywords):
         await ctx.send("⛔ Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
@@ -85,4 +91,4 @@ async def leave(ctx):
         await ctx.voice_client.disconnect()
         await ctx.send("👋 Me fui del canal, chatranes! Aguante la empanada sin papa.")
 
-bot.run(os.getenv("MTM3NTQzMjAxMzkwOTIwMDk5Nw.GuL_IC.O1M-1KZbWTLaCFDzaLAfNU5Mq0Emtjy7OB5NeQ"))
+bot.run(os.getenv("DISCORD_TOKEN"))
