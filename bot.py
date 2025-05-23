@@ -11,15 +11,19 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
+# Ruta a tu archivo cookies.txt (exportado de Chrome con sesión activa)
+COOKIES_PATH = "cookies.txt"  # Cambialo si lo tenés en otra ruta
+
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'noplaylist': True,
-    'quiet': True,
-    'no_warnings': True,
+    'quiet': False,          # Mostrar logs y errores para debug
+    'no_warnings': False,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
-    # 'cookiefile': 'cookies.txt',  # Descomentá si necesitás cookies para videos restringidos
+    'cookiefile': COOKIES_PATH,  # Usar cookies para evitar bloqueos
     'ignoreerrors': True,
+    'verbose': True,
 }
 
 ytdl = YoutubeDL(ytdl_format_options)
@@ -33,11 +37,8 @@ async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
         voice_client = await channel.connect()
-
-        # Reproducir sonido al unirse
         audio_source = discord.FFmpegPCMAudio('alohalokitas.mp3', executable=FFMPEG_PATH)
         voice_client.play(audio_source)
-
         await ctx.send(f"🎧 Conectado a {channel}. ¡Sin ritmos caribeños!")
     else:
         await ctx.send("¡Tenés que estar en un canal de voz!")
