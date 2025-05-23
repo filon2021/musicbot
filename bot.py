@@ -1,17 +1,15 @@
-# bot.py
 import discord
 from discord.ext import commands
 import os
 from yt_dlp import YoutubeDL
+import imageio_ffmpeg
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Cambiá esto según dónde esté ffmpeg en tu sistema.
-# Si está en el PATH, con "ffmpeg" alcanza.
-FFMPEG_PATH = "ffmpeg"  # o "/usr/bin/ffmpeg", o "C:\\ffmpeg\\bin\\ffmpeg.exe"
+FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
 # Configuración para yt_dlp
 ytdl_format_options = {
@@ -34,10 +32,12 @@ async def on_ready():
 async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
-        await channel.connect()
-        # Reproducir sonido al entrar
+        voice_client = await channel.connect()
+
+        # Reproducir sonido al unirse
         audio_source = discord.FFmpegPCMAudio('alohalokitas.mp3', executable=FFMPEG_PATH)
-        ctx.voice_client.play(audio_source)
+        voice_client.play(audio_source)
+
         await ctx.send(f"🎧 Conectado a {channel}. ¡Sin ritmos caribeños!")
     else:
         await ctx.send("¡Tenés que estar en un canal de voz!")
