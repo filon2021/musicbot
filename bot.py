@@ -11,30 +11,33 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
-# Configuración yt-dlp optimizada (sin extract_flat y forzando mejor formato disponible)
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'noplaylist': True,
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'cookiefile': 'cookies.txt',  # Opcional, por si querés agregar cookies manualmente
     'source_address': '0.0.0.0',
+    # 'cookiefile': 'cookies.txt',  # Descomentá si necesitás cookies para videos restringidos
+    'ignoreerrors': True,
 }
 
 ytdl = YoutubeDL(ytdl_format_options)
 
 @bot.event
 async def on_ready():
-    print(f"✅ Bot listo como {bot.user}")
+    print(f"Bot listo como {bot.user}")
 
 @bot.command()
 async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
         voice_client = await channel.connect()
+
+        # Reproducir sonido al unirse
         audio_source = discord.FFmpegPCMAudio('alohalokitas.mp3', executable=FFMPEG_PATH)
         voice_client.play(audio_source)
+
         await ctx.send(f"🎧 Conectado a {channel}. ¡Sin ritmos caribeños!")
     else:
         await ctx.send("¡Tenés que estar en un canal de voz!")
@@ -56,7 +59,7 @@ async def play(ctx, *, source: str):
     ]
 
     if any(keyword.lower() in source.lower() for keyword in prohibited_keywords):
-        await ctx.send("⛔ Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256.")
+        await ctx.send("⛔ Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
         return
 
     connected = await ensure_voice(ctx)
@@ -68,21 +71,18 @@ async def play(ctx, *, source: str):
 
     try:
         info = ytdl.extract_info(source, download=False)
-        if 'entries' in info:
-            info = info['entries'][0]  # Si es playlist, agarrar el primero
-
         url_audio = info['url']
-        titulo = info.get('title', 'Audio desconocido')
+        titulo = info.get('title', source)
 
         if any(keyword.lower() in titulo.lower() for keyword in prohibited_keywords):
-            await ctx.send(f"⛔ '{titulo}' está vetado por la ley anti ritmos caribeños.")
+            await ctx.send(f"⛔ '{titulo}' Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
             return
 
         audio_source = discord.FFmpegPCMAudio(url_audio, executable=FFMPEG_PATH, options='-vn')
         ctx.voice_client.play(audio_source)
         await ctx.send(f"🎶 Reproduciendo: {titulo}")
     except Exception as e:
-        await ctx.send(f"No pude reproducir eso: {str(e)}")
+        await ctx.send(f"No pude reproducir eso: {e}")
 
 @bot.command()
 async def stop(ctx):
@@ -94,6 +94,6 @@ async def stop(ctx):
 async def leave(ctx):
     if ctx.voice_client:
         await ctx.voice_client.disconnect()
-        await ctx.send("👋 Me fui del canal, chatranes!")
+        await ctx.send("👋 Me fui del canal, chatranes! Aguante la empanada sin papa.")
 
 bot.run(os.getenv("DISCORD_TOKEN"))
