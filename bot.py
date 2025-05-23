@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 import os
@@ -15,7 +14,6 @@ ytdl_format_options = {
     'format': 'bestaudio/best',
     'noplaylist': True,
     'quiet': True,
-    'extract_flat': 'in_playlist',
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0'
@@ -50,7 +48,7 @@ async def play(ctx, *, source: str):
     prohibited_keywords = ["cumbia", "reggaeton", "daddy yankee", "bad bunny", "karol g", "vallenato", "ozuna", "anuel"]
 
     if any(keyword.lower() in source.lower() for keyword in prohibited_keywords):
-        await ctx.send("⛔ Esta rola está vetada por la ley anti ritmos caribeños. Buscate algo con más guitarra o sintetizador 😎")
+        await ctx.send("⛔ Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
         return
 
     connected = await ensure_voice(ctx)
@@ -66,7 +64,7 @@ async def play(ctx, *, source: str):
         titulo = info.get('title', source)
 
         if any(keyword.lower() in titulo.lower() for keyword in prohibited_keywords):
-            await ctx.send(f"⛔ '{titulo}' no cumple con el código anti-tropi. ¡Elegí otra cosa, campeón!")
+            await ctx.send(f"⛔ '{titulo}' Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
             return
 
         audio_source = discord.FFmpegPCMAudio(url_audio, executable=FFMPEG_PATH, options='-vn')
@@ -85,6 +83,6 @@ async def stop(ctx):
 async def leave(ctx):
     if ctx.voice_client:
         await ctx.voice_client.disconnect()
-        await ctx.send("👋 Me fui del canal.")
+        await ctx.send("👋 Me fui del canal, chatranes! Aguante la empanada sin papa.")
 
-bot.run(os.getenv("DISCORD_TOKEN"))
+bot.run(os.getenv("MTM3NTQzMjAxMzkwOTIwMDk5Nw.GuL_IC.O1M-1KZbWTLaCFDzaLAfNU5Mq0Emtjy7OB5NeQ"))
