@@ -80,7 +80,7 @@ async def play(ctx, *, source: str):
 
         audio_source = discord.FFmpegPCMAudio(url_audio, executable=FFMPEG_PATH, options='-vn')
         ctx.voice_client.play(audio_source)
-        await ctx.send(f"🎶 Reproduciendo: {titulo}")
+        await ctx.send(f"🎶 Reproduciendo: {titulo}"
     except Exception as e:
         await ctx.send(f"No pude reproducir eso: {e}")
 
