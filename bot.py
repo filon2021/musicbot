@@ -11,16 +11,15 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
-# Configuración para yt_dlp con uso de cookies (descomentá cookiefile si usás cookies)
+# Configuración de yt_dlp con cookies habilitadas
 ytdl_format_options = {
     'format': 'bestaudio/best[ext=m4a]/best',
     'noplaylist': True,
     'quiet': True,
-    'extract_flat': 'in_playlist',
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
-    'cookiefile': 'cookies.txt',  # descomentá si necesitás usar cookies
+    'cookiefile': 'cookies.txt',  # Asegurate de tener este archivo con cookies válidas
 }
 
 ytdl = YoutubeDL(ytdl_format_options)
@@ -35,7 +34,7 @@ async def join(ctx):
         channel = ctx.author.voice.channel
         voice_client = await channel.connect()
 
-        # Reproducir sonido al unirse
+        # Reproducir audio de bienvenida
         audio_source = discord.FFmpegPCMAudio('alohalokitas.mp3', executable=FFMPEG_PATH)
         voice_client.play(audio_source)
 
@@ -76,7 +75,7 @@ async def play(ctx, *, source: str):
         titulo = info.get('title', source)
 
         if any(keyword.lower() in titulo.lower() for keyword in prohibited_keywords):
-            await ctx.send(f"⛔ '{titulo}' Esta COSA está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
+            await ctx.send(f"⛔ '{titulo}' está vetada por la ley anti ritmos caribeños y no cumple con el código anti-tropi #2343256. Buscate algo con más guitarra o músicos de verdad al menos, bigote de ornitorrinco 😎")
             return
 
         audio_source = discord.FFmpegPCMAudio(url_audio, executable=FFMPEG_PATH, options='-vn')
