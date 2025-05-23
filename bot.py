@@ -11,16 +11,15 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
-# Configuración para yt_dlp con uso de cookies
+# Configuración para yt_dlp con uso de cookies (si las usás, sino sacá 'cookiefile')
 ytdl_format_options = {
-    'format': 'bestaudio/best',
+    'format': 'bestaudio',
     'noplaylist': True,
     'quiet': True,
-    'extract_flat': 'in_playlist',
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
-    'cookiefile': 'cookies.txt',  # <--- Archivo con cookies exportadas del navegador
+    'cookiefile': 'cookies.txt',  # comentá o eliminá esta línea si no usás cookies
 }
 
 ytdl = YoutubeDL(ytdl_format_options)
